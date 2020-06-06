@@ -1,0 +1,9 @@
+﻿  MainCode_8Puzzle.cpp
+D:\Pro_Study\Quoc_Dat_CNTT\6.HK2_Nam3\Tri_Tue_Nhan_Tao\DO_AN\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(37,2): warning C4091: 'typedef ': ignored on left of 'NodeList' when no variable is declared
+D:\Pro_Study\Quoc_Dat_CNTT\6.HK2_Nam3\Tri_Tue_Nhan_Tao\DO_AN\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(226,14): warning C4018: '<': signed/unsigned mismatch
+D:\Pro_Study\Quoc_Dat_CNTT\6.HK2_Nam3\Tri_Tue_Nhan_Tao\DO_AN\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(320,15): warning C4101: 'frontier': unreferenced local variable
+D:\Pro_Study\Quoc_Dat_CNTT\6.HK2_Nam3\Tri_Tue_Nhan_Tao\DO_AN\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(382,23): warning C4018: '<': signed/unsigned mismatch
+D:\Pro_Study\Quoc_Dat_CNTT\6.HK2_Nam3\Tri_Tue_Nhan_Tao\DO_AN\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(455,34): warning C4018: '<=': signed/unsigned mismatch
+D:\Pro_Study\Quoc_Dat_CNTT\6.HK2_Nam3\Tri_Tue_Nhan_Tao\DO_AN\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(476,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+D:\Pro_Study\Quoc_Dat_CNTT\6.HK2_Nam3\Tri_Tue_Nhan_Tao\DO_AN\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(390): warning C4715: 'RemoveNode': not all control paths return a value
+  MainCode_8Puzzle.vcxproj -> D:\Pro_Study\Quoc_Dat_CNTT\6.HK2_Nam3\Tri_Tue_Nhan_Tao\DO_AN\AI_2020\Source Code\MainCode_8Puzzle\Debug\MainCode_8Puzzle.exe
