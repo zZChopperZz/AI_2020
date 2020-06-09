@@ -1,9 +1,11 @@
 ﻿  MainCode_8Puzzle.cpp
-D:\HOC\AI\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(37,2): warning C4091: 'typedef ': ignored on left of 'NodeList' when no variable is declared
-D:\HOC\AI\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(226,14): warning C4018: '<': signed/unsigned mismatch
-D:\HOC\AI\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(320,15): warning C4101: 'frontier': unreferenced local variable
-D:\HOC\AI\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(380,23): warning C4018: '<': signed/unsigned mismatch
-D:\HOC\AI\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(454,34): warning C4018: '<=': signed/unsigned mismatch
-D:\HOC\AI\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(475,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-D:\HOC\AI\AI_2020\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(388): warning C4715: 'RemoveNode': not all control paths return a value
-  MainCode_8Puzzle.vcxproj -> D:\HOC\AI\AI_2020\Source Code\MainCode_8Puzzle\Debug\MainCode_8Puzzle.exe
+D:\HOC\AI\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(38,2): warning C4091: 'typedef ': ignored on left of 'NodeList' when no variable is declared
+D:\HOC\AI\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(44,2): warning C4091: 'typedef ': ignored on left of 'Vitri' when no variable is declared
+D:\HOC\AI\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(236,14): warning C4018: '<': signed/unsigned mismatch
+D:\HOC\AI\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(330,15): warning C4101: 'frontier': unreferenced local variable
+D:\HOC\AI\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(390,23): warning C4018: '<': signed/unsigned mismatch
+D:\HOC\AI\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(464,34): warning C4018: '<=': signed/unsigned mismatch
+D:\HOC\AI\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(517,34): warning C4018: '<=': signed/unsigned mismatch
+D:\HOC\AI\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(534,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+D:\HOC\AI\Source Code\MainCode_8Puzzle\MainCode_8Puzzle\MainCode_8Puzzle.cpp(398): warning C4715: 'RemoveNode': not all control paths return a value
+  MainCode_8Puzzle.vcxproj -> D:\HOC\AI\Source Code\MainCode_8Puzzle\Debug\MainCode_8Puzzle.exe

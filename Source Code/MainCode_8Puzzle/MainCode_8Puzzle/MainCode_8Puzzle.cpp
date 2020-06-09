@@ -7,6 +7,7 @@
 #include<malloc.h>
 #include<string.h>
 #include<ctime>
+#include <string>
 using namespace std;
 
 enum class Actions { 
@@ -36,6 +37,33 @@ typedef struct NodeList {
     Node* tail;            //pointer to the last node in the list
 };
 
+typedef struct Vitri
+{
+    int index_i = 0;
+    int index_j = 0;
+};
+
+typedef struct VitriXemDuoc
+{
+    int ii= 0;
+    int jj= 0;
+}XemDuoc;
+
+Vitri timkiemRong(Node* node)
+{
+    Vitri A;
+    for (int i = 0; i < SIDE; i++) {
+        for (int j = 0; j < SIDE; j++) {
+            if (node->state[i][j] == 0) {
+                A.index_i = i;
+                A.index_j = j;
+                i = SIDE;
+                break;
+            }
+        }
+    }
+    return A;
+}
 
 void set_zero(int a[][SIDE])
 {
@@ -99,8 +127,7 @@ void print_array2(int a[][SIDE], int x, int y)
             }
             else
             {
-                //printf("X | ");
-                std::cout << "X  | ";
+                cout << "X  | ";
             }
         }
         printf("\n");
@@ -112,21 +139,13 @@ void print_array2(int a[][SIDE], int x, int y)
 }
 
 bool isLegalAction(Node* node, Actions action) {
-    int index_i, index_j;
-    for (int i = 0; i < SIDE; i++) {
-        for (int j = 0; j < SIDE; j++) {
-            if (node->state[i][j] == 0) {
-                index_i = i;
-                index_j = j;
-                i = SIDE;
-                break;
-            }
-        }
-    }
-    if (action == Actions::left && index_j == 0)  return false;
-    if (action == Actions::right && index_j == 2)  return false;
 
-    switch (index_i)
+    Vitri A = timkiemRong(node);
+
+    if (action == Actions::left && A.index_j == 0)  return false;
+    if (action == Actions::right && A.index_j == 2)  return false;
+
+    switch (A.index_i)
     {
     case 0:
         if (action == Actions::up) return false;
@@ -142,32 +161,23 @@ bool isLegalAction(Node* node, Actions action) {
 
 Node* Child_node(Node* node, Actions action) {
     Node* child = (Node*)malloc(sizeof(Node));
-    int index_i, index_j;
-    for (int i = 0; i < SIDE; i++) {
-        for (int j = 0; j < SIDE; j++) {
-            if (node->state[i][j] == 0) {
-                index_i = i;
-                index_j = j;
-                i = SIDE;
-                break;
-            }
-        }
-    }
+
+    Vitri A = timkiemRong(node);
     copy_array(child->state, node->state);
     child->action = action;
     child->parent = node;
     child->path_cost = node->path_cost + 1;
     if (action == Actions::left) {
-        swap(child->state[index_i][index_j - 1], child->state[index_i][index_j]);
+        swap(child->state[A.index_i][A.index_j - 1], child->state[A.index_i][A.index_j]);
     }
     else if (action == Actions::right) {
-        swap(child->state[index_i][index_j + 1], child->state[index_i][index_j]);
+        swap(child->state[A.index_i][A.index_j + 1], child->state[A.index_i][A.index_j]);
     }
     else if (action == Actions::up) {
-        swap(child->state[index_i - 1][index_j], child->state[index_i][index_j]);
+        swap(child->state[A.index_i - 1][A.index_j], child->state[A.index_i][A.index_j]);
     }
     else if (action == Actions::down) {
-        swap(child->state[index_i + 1][index_j], child->state[index_i][index_j]);
+        swap(child->state[A.index_i + 1][A.index_j], child->state[A.index_i][A.index_j]);
     }
 
     return child;
@@ -241,7 +251,7 @@ void Solution(Node* node) {
 
         print_array(node->state);
         printf("\n----------^---------\n");
-        std::cout << "\naction: " << action_names[int(node->action)] << std::endl;
+        cout << "\naction: " << action_names[int(node->action)] << endl;
         printf("----------------------\n");
         node = node->parent;
     }
@@ -453,7 +463,7 @@ void aStarSearch(Node* root, Node* goal)
                         Node* temp = frontier->head;
                         while (i <= frontier->nodeCount - 1)
                         {
-                            if (is_equal(temp->state, child->state) == 1 && (manhattanDist(child, goal) < manhattanDist(temp, goal)))
+                            if (is_equal(temp->state, child->state) == 1 && (manhattanDist(child, goal) < manhattanDist(temp, goal)))   //hàm tính chi phí để đi đến trạng thái đích
                             {
                                 LIFO_add(frontier, child);
                                 RemoveNode(frontier, temp);
@@ -465,49 +475,247 @@ void aStarSearch(Node* root, Node* goal)
                 }
             }
         }
-    } while (frontier->nodeCount > 0);
+    } 
+    while (frontier->nodeCount > 0);
     printf("No solution");
 }
 
-void random(int& x1, int& x2, int& x3, int& x4, int& x5, int& x6, int& x7, int& x8)
+Node* CreateStartState(Node* root)
+{
+    Node* node = root;
+    Node* nodestate = NULL;
+    int action;
+    NodeList* frontier;
+    NodeList* explorer;
+    frontier = FIFO_initial();
+    explorer = FIFO_initial();
+    LIFO_add(frontier, node);
+    int x = 0;
+    srand((int)time(0));
+    int random = 40 + rand() % (60 + 1 - 40);
+    while (x < random)
+    {
+        node = LIFO_pop(frontier);
+        LIFO_add(explorer, node);       //Đổ từng node của frontier sang explorer
+        //action
+        for (action = 0; action < 4; action++) {
+            if (isLegalAction(node, (Actions)action)) { // nếu di chuyển được
+                Node* child = (Child_node(node, (Actions)action));
+                if (checkExist(explorer, child) == false)   //kiểm tra có di chuyển lại bước trước đó
+                {
+                    if (checkExist(frontier, child) == false)   //kiểm tra có di chuyển lại bước ban đầu
+                    {
+                        
+                        FIFO_add(frontier, child);
+                        nodestate = child;
+                        break;
+                    }
+                    else
+                    {
+                        int i = 0;
+                        Node* temp = frontier->head;
+                        while (i <= frontier->nodeCount - 1)
+                        {
+                            temp = temp->nextNode;
+                            i++;
+                        }
+                    }
+                }
+            }
+        }
+
+        x++;
+    }
+    return nodestate;
+}
+void random(int& x0, int& x1, int& x2, int& x3, int& x4, int& x5, int& x6, int& x7, int& x8)
 {
     //x1 = x2 = x3 = x4 = x5 = x6 = x7 = x8 = 0;
     srand(time(NULL));
-    x1 = rand() % 8 + 1;
-    while (x2 == x1 || x2 == x3 || x2 == x4 || x2 == x5 || x2 == x6 || x2 == x7 || x2 == x8)
+    x0 = rand() % 9;
+    while (x1 == x0 || x1 == x2 || x1 == x3 || x1 == x4 || x1 == x5 || x1 == x6 || x1 == x7 || x1 == x8)
     {
-        x2 = rand() % 8 + 1;
+        x1 = rand() % 9;
     }
-    while (x3 == x1 || x3 == x2 || x3 == x4 || x3 == x5 || x3 == x6 || x3 == x7 || x3 == x8)
+    while (x2 == x0 || x2 == x1 || x2 == x3 || x2 == x4 || x2 == x5 || x2 == x6 || x2 == x7 || x2 == x8)
     {
-        x3 = rand() % 8 + 1;
+        x2 = rand() % 9;
     }
-    while (x4 == x1 || x4 == x2 || x4 == x3 || x4 == x5 || x4 == x6 || x4 == x7 || x4 == x8)
+    while (x3 == x0 || x3 == x1 || x3 == x2 || x3 == x4 || x3 == x5 || x3 == x6 || x3 == x7 || x3 == x8)
     {
-        x4 = rand() % 8 + 1;
+        x3 = rand() % 9;
     }
-    while (x5 == x1 || x5 == x2 || x5 == x3 || x5 == x4 || x5 == x6 || x5 == x7 || x5 == x8)
+    while (x4 == x0 || x4 == x1 || x4 == x2 || x4 == x3 || x4 == x5 || x4 == x6 || x4 == x7 || x4 == x8)
     {
-        x5 = rand() % 8 + 1;
+        x4 = rand() % 9;
     }
-    while (x6 == x1 || x6 == x2 || x6 == x3 || x6 == x4 || x6 == x5 || x6 == x7 || x6 == x8)
+    while (x5 == x0 || x5 == x1 || x5 == x2 || x5 == x3 || x5 == x4 || x5 == x6 || x5 == x7 || x5 == x8)
     {
-        x6 = rand() % 8 + 1;
+        x5 = rand() % 9;
     }
-    while (x7 == x1 || x7 == x2 || x7 == x3 || x7 == x4 || x7 == x5 || x7 == x6 || x7 == x8)
+    while (x6 == x0 || x6 == x1 || x6 == x2 || x6 == x3 || x6 == x4 || x6 == x5 || x6 == x7 || x6 == x8)
     {
-        x7 = rand() % 8 + 1;
+        x6 = rand() % 9;
     }
-    while (x8 == x1 || x8 == x2 || x8 == x3 || x8 == x4 || x8 == x5 || x8 == x6 || x8 == x7 || x8 == 0)
+    while (x7 == x0 || x7 == x1 || x7 == x2 || x7 == x3 || x7 == x4 || x7 == x5 || x7 == x6 || x7 == x8)
     {
-        x8 = rand() % 8 + 1;
+        x7 = rand() % 9;
     }
+    while (x8 == x0 || x8 == x1 || x8 == x2 || x8 == x3 || x8 == x4 || x8 == x5 || x8 == x6 || x8 == x7 || x8 == 0)
+    {
+        x8 = rand() % 9;
+    }
+}
+
+
+
+
+void print_array3(int a[][SIDE], int x, int y , int dem1,int dem2)
+{
+    int i, j;
+    for (i = 0; i < SIDE; i++)
+    {
+        for (j = 0; j < SIDE; j++)
+        {
+            if ((i == x && j == y) || a[i][j] == 0 || i == dem1 && j == dem2)
+            {
+                printf("%d  | ", a[i][j]);
+            }
+            else
+            {
+                cout << "X  | ";
+            }
+        }
+        printf("\n");
+        for (j = 0; j < SIDE; j++)
+            printf("---|-");
+
+        printf("\n");
+    }
+}
+
+void Solution2(Node* node, XemDuoc* xd) {
+    printf("=======================");
+
+    printf("\nSolution 222\n");
+
+    //XemDuoc* xd = (XemDuoc*)malloc(sizeof(XemDuoc));
+    int x = xd->ii;
+    int y = xd->jj;
+    while (node->parent != NULL) {
+
+        //print_array2(node->state,x,y);
+        int dem = node->state[x][y];
+        int dem1;
+        int dem2;
+        for (int i = 0; i < SIDE; i++)
+        {
+            for (int j = 0; j < SIDE; j++)
+            {
+                if (node->state[i][j] == dem)
+                {
+                    dem1 = i;
+                    dem2 = j;
+                }
+            }
+        }
+
+        
+        print_array3(node->state, x, y, dem1, dem2);
+
+
+
+        printf("\n----------^---------\n");
+        std::cout << "\naction: " << action_names[int(node->action)] << std::endl;
+        printf("----------------------\n");
+        node = node->parent;
+    }
+    print_array2(node->state,x,y);
+
+}
+
+void swap2(Node* node, int& a, int& b, int ii, int jj)
+{
+    if (node->state[ii][jj] == 0)
+    {
+        int temp;
+        temp = a;
+        a = b;
+        b = temp;
+    }
+}
+
+Node* Child_node2(Node* node, Actions action) {
+    Node* child = (Node*)malloc(sizeof(Node));
+    XemDuoc* xd = (XemDuoc*)malloc(sizeof(XemDuoc));
+    int x = xd->ii;
+    int y = xd->jj;
+    Vitri A = timkiemRong(node);
+    copy_array(child->state, node->state);
+    child->action = action;
+    child->parent = node;
+    child->path_cost = node->path_cost + 1;
+    if (action == Actions::left) {
+        swap2(node,child->state[A.index_i][A.index_j - 1], child->state[A.index_i][A.index_j], x,y);
+    }
+    else if (action == Actions::right) {
+        swap2(node,child->state[A.index_i][A.index_j + 1], child->state[A.index_i][A.index_j],x,y);
+    }
+    else if (action == Actions::up) {
+        swap2(node,child->state[A.index_i - 1][A.index_j], child->state[A.index_i][A.index_j],x,y);
+    }
+    else if (action == Actions::down) {
+        swap2(node,child->state[A.index_i + 1][A.index_j], child->state[A.index_i][A.index_j],x,y);
+    }
+
+    return child;
+
+    //can't free memory
+}
+
+void VitriSearch(Node* root, Node* goal, XemDuoc* xd) {
+    int dem = 0;
+    Node* node = root;
+    int Path_cost = 0;
+    if (Goal_test(node, goal)) {
+        Solution(node);
+        return;
+    }
+    NodeList* frontier;
+    NodeList* explorer;
+    frontier = FIFO_initial();
+    explorer = FIFO_initial();
+    int action;
+    FIFO_add(frontier, node);
+    do {
+        node = FIFO_pop(frontier);
+        FIFO_add(explorer, node);
+        //action
+        for (action = 0; action < 4; action++) {
+            if (isLegalAction(node, (Actions)action)) {
+                Node* child = (Child_node(node, (Actions)action));
+                if (checkExist(explorer, child) == false || checkExist(frontier, child) == false) {
+                    if (Goal_test(child, goal)) {
+                        Solution2(child, xd);
+                        return;
+                    }
+                    FIFO_add(frontier, child);
+                    //free(child);
+                }
+            }
+        }
+    } while (frontier->nodeCount > 0);
 }
 
 int main()
 {
-    int x0 = 0, x1 = 4, x2 = 3, x3 = 2, x4 = 1, x5 = 5, x6 = 6, x7 = 7, x8 = 8;
-    //random(x1, x2, x3, x4, x5, x6, x7, x8);
+
+    //int x0 = 0, x1 = 4, x2 = 3, x3 = 2, x4 = 1, x5 = 5, x6 = 6, x7 = 7, x8 = 8;
+    //int x0 = 2, x1 = 4, x2 = 3, x3 = 6, x4 = 1, x5 = 5, x6 = 7, x7 = 8, x8 = 0;
+    //int x0 = 0, x1 = 0, x2 = 0, x3 = 0, x4 = 0, x5 = 0, x6 = 0, x7 = 0, x8 = 0;
+    //int x0 = 1, x1 = 2, x2 = 5, x3 = 3, x4 = 4, x5 = 0, x6 = 6, x7 = 7, x8 = 8;
+    int x0 = 1, x1 = 4, x2 = 2, x3 = 3, x4 = 5, x5 = 8, x6 = 6, x7 = 7, x8 = 0;
+    //random(x0, x1, x2, x3, x4, x5, x6, x7, x8);
     int a[SIDE][SIDE] =
     {
         {x0,x1,x2},
@@ -518,6 +726,8 @@ int main()
     Node* Goal, * Start;
     int i, j ,r = 0;
     int goalstate[9] = { 0,1,2,3,4,5,6,7,8 };
+    XemDuoc* xd = (XemDuoc*)malloc(sizeof(XemDuoc));
+
     Goal = (Node*)malloc(sizeof(Node));
     Start = (Node*)malloc(sizeof(Node));
     printf("The goal state\n");
@@ -542,18 +752,31 @@ int main()
     Start->parent = NULL;
     Start->path_cost = 0;
     printf("Start state:\n");
-    print_array2(Start->state,0,1);
+    //cout << "Nhap mot vi tri xem duoc gia tri : ";
+    //cin >> xd->ii;
+    //cin >> xd->jj;
+    //int x = xd->ii;
+    //int y = xd->jj;
+    //print_array2(Start->state,x,y);
     cout << endl;
     cout << "Start state Add:" << endl;
+    //print_array(Start->state);
+    Start = CreateStartState(Goal);
     print_array(Start->state);
 
-    //call search function
-    //breadthFirstSearch(Start, Goal);
+    
     //depthFirstSearch(Start, Goal);
-    aStarSearch(Start, Goal);
 
+
+    //VitriSearch(Start, Goal, xd);
+    cout << "==================================================" << endl;
+    //breadthFirstSearch(Start, Goal);
+    aStarSearch(Start, Goal);
+    
     // free 
     free(Goal);
     free(Start);
+
+
     return 0;
 }
