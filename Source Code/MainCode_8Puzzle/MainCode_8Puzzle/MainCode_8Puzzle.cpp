@@ -1,4 +1,4 @@
-// MainCode_8Puzzle.cpp : This file contains the 'main' function. Program execution begins and ends there.
+﻿// MainCode_8Puzzle.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include <iostream>
@@ -15,7 +15,7 @@ enum class Actions {
     up = 2,
     down = 3
 };
-std::string action_names[] = { "left","right","up","down" };
+string action_names[] = { "left","right","up","down" };
 #define SIDE 3 // Length of the board 
 typedef struct Node_array//should be tile
 {
@@ -335,10 +335,6 @@ void depthFirstSearch(Node* root, Node* goal) {
 }
 
 
-void uniformCostSearch(Node* root, Node* goal) {
-
-}
-
 void LIFO_add(NodeList* list, Node* node)
 {
     if (list->nodeCount <= 0)
@@ -352,6 +348,7 @@ void LIFO_add(NodeList* list, Node* node)
     list->head = node;
     list->nodeCount += 1;
 }
+
 Node* LIFO_pop(NodeList* list)
 {
     if (list->nodeCount <= 0)
@@ -371,6 +368,7 @@ Node* LIFO_pop(NodeList* list)
     list->nodeCount -= 1;
     return temp;
 }
+
 Node* RemoveNode(NodeList* list, Node* node)
 {
     Node* n1 = list->head;
@@ -388,6 +386,7 @@ Node* RemoveNode(NodeList* list, Node* node)
         n1 = n1->nextNode;
     }
 }
+
 int manhattanDist(Node* node, Node* goal)
 {
     int x0, y0; //used for indexing each symbol in `curr`
@@ -418,28 +417,28 @@ void aStarSearch(Node* root, Node* goal)
 {
     Node* node = root;
     int action;
-    if (Goal_test(node, goal))
+    if (Goal_test(node, goal)) //kiển tra xem state hiện tại có bằng goal srate không
     {
-        Solution(node);
+        Solution(node);     // nếu bằng thì in ra
         return;
     }
-
+    // nếu chưa bằng:
     NodeList* frontier;
     NodeList* explorer;
     frontier = FIFO_initial();
     explorer = FIFO_initial();
-    LIFO_add(frontier, node);
+    LIFO_add(frontier, node);   
     while (frontier->nodeCount > 0)
     {
         node = LIFO_pop(frontier);
-        LIFO_add(explorer, node);
+        LIFO_add(explorer, node);       //Đổ từng node của frontier sang explorer
         //action
         for (action = 0; action < 4; action++) {
-            if (isLegalAction(node, (Actions)action)) {
+            if (isLegalAction(node, (Actions)action)) { // nếu di chuyển được
                 Node* child = (Child_node(node, (Actions)action));
-                if (checkExist(explorer, child) == false)
+                if (checkExist(explorer, child) == false)   //kiểm tra có di chuyển lại bước trước đó
                 {
-                    if (checkExist(frontier, child) == false)
+                    if (checkExist(frontier, child) == false)   //kiểm tra có di chuyển lại bước ban đầu
                     {
                         if (Goal_test(child, goal))
                         {
@@ -507,8 +506,8 @@ void random(int& x1, int& x2, int& x3, int& x4, int& x5, int& x6, int& x7, int& 
 
 int main()
 {
-    int x0 = 0, x1 = 0, x2 = 0, x3 = 0, x4 = 0, x5 = 0, x6 = 0, x7 = 0, x8 = 0;
-    random(x1, x2, x3, x4, x5, x6, x7, x8);
+    int x0 = 0, x1 = 4, x2 = 3, x3 = 2, x4 = 1, x5 = 5, x6 = 6, x7 = 7, x8 = 8;
+    //random(x1, x2, x3, x4, x5, x6, x7, x8);
     int a[SIDE][SIDE] =
     {
         {x0,x1,x2},
@@ -521,7 +520,7 @@ int main()
     int goalstate[9] = { 0,1,2,3,4,5,6,7,8 };
     Goal = (Node*)malloc(sizeof(Node));
     Start = (Node*)malloc(sizeof(Node));
-    printf("Enter the goal state\n");
+    printf("The goal state\n");
     for (i = 0; i < 3; i++)
         for (j = 0; j < 3; j++)
         {
@@ -539,7 +538,6 @@ int main()
     printf("Enter the current state\n");
     for (i = 0; i < 3; i++)
         for (j = 0; j < 3; j++)
-            //std::cin >> Start->state[i][j];
             Start->state[i][j] = a[i][j];
     Start->parent = NULL;
     Start->path_cost = 0;
